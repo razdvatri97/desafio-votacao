@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -31,7 +30,7 @@ public class VotacaoController {
     @ApiResponse(responseCode = "302", description = "Consultar uma pauta via ID")
     @GetMapping(value = "/consultar/pauta/{pautaId}")
     @ResponseStatus(code = FOUND)
-    public Optional<Pauta> consultarPauta(@PathVariable @NotEmpty Long pautaId) {
+    public ResponseEntity<?> consultarPauta(@PathVariable @NotEmpty Long pautaId) {
         return pautaService.consultar(pautaId);
     }
 
