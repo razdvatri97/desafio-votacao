@@ -5,6 +5,7 @@ import com.desafio.votacao.entidade.Pauta;
 import com.desafio.votacao.service.PautaService;
 import com.desafio.votacao.service.VotacaoService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +28,17 @@ public class VotacaoController {
     private VotacaoService votacaoService;
 
 
-    @ApiResponse(responseCode = "302", description = "Consultar uma pauta via ID")
+    @ApiResponse(responseCode = "302", description = "Consultar uma pauta via ID ")
     @GetMapping(value = "/consultar/pauta/{pautaId}")
     @ResponseStatus(code = FOUND)
-    public ResponseEntity<?> consultarPauta(@PathVariable @NotEmpty Long pautaId) {
+    public ResponseEntity<?> consultarPauta(@PathVariable @Valid Long pautaId) {
         return pautaService.consultar(pautaId);
     }
 
     @ApiResponse(responseCode = "201", description = "Cadastrar uma nova pauta")
     @PostMapping(value = "/criar/pauta")
     @ResponseStatus(code = CREATED)
-    public ResponseEntity<Pauta> criarPauta(@RequestBody @NotEmpty Pauta pauta) {
+    public ResponseEntity<?> criarPauta(@RequestBody @Valid Pauta pauta) {
         return pautaService.criarPauta(pauta);
     }
 
