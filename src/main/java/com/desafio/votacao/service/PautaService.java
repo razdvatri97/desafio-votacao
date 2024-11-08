@@ -1,5 +1,6 @@
 package com.desafio.votacao.service;
 
+import com.desafio.votacao.dto.PautaDataFimDTO;
 import com.desafio.votacao.entidade.Pauta;
 import com.desafio.votacao.repositorio.PautaRepositorio;
 import jakarta.validation.Valid;
@@ -9,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpStatus.*;
 
 @Service
@@ -39,7 +39,7 @@ public class PautaService {
         Pauta novaPauta = Pauta.builder()
                 .descricao(pauta.getDescricao())
                 .dataInicio(pauta.getDataInicio())
-                .dataFim(pauta.getDataFim())
+                .dataFim(LocalDateTime.MIN)
                 .eleitores(emptyList())
                 .build();
 
@@ -47,7 +47,17 @@ public class PautaService {
         return ResponseEntity.status(CREATED).body(pautaSalva);
     }
 
-    public ResponseEntity<Pauta> abrirPauta(@NotEmpty Long pautaId, @NotEmpty LocalDate dataFim) {
-        return null;
+    public ResponseEntity<?> abrirPauta(@NotEmpty Long pautaId, @NotEmpty PautaDataFimDTO dataFim) {
+        Optional<Pauta> pauta = repositorio.findPautaById(pautaId);
+
+        if (pauta.isPresent()) {
+            pauta.get().setDataFim(dataFim.getDataFim());
+
+            Pauta pautaAtualizada = repositorio.save(pauta.get());
+            return ResponseEntity.status(ACCEPTED).body(pautaAtualizada);
+        } else {
+            String mensagemErro = "Esta pauta: " + pautaId + " não existe";
+            return ResponseEntity.status(NOT_FOUND).body(mensagemErro);
+        }
     }
 }

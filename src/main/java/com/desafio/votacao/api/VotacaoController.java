@@ -1,18 +1,17 @@
 package com.desafio.votacao.api;
 
 
+import com.desafio.votacao.dto.PautaDataFimDTO;
+import com.desafio.votacao.dto.VotoDTO;
 import com.desafio.votacao.entidade.Pauta;
 import com.desafio.votacao.service.PautaService;
 import com.desafio.votacao.service.VotacaoService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -43,16 +42,16 @@ public class VotacaoController {
     }
 
     @ApiResponse(responseCode = "202", description = "Abrir uma pauta via e ID e data limite")
-    @PostMapping(value = "/abrir/pauta/{pautaId}")
+    @PatchMapping(value = "/abrir/pauta/{pautaId}")
     @ResponseStatus(code = ACCEPTED)
-    public ResponseEntity<Pauta> abrirPauta(@PathVariable @NotEmpty Long pautaId, @RequestBody @NotEmpty LocalDate dataFim) {
-        return pautaService.abrirPauta(pautaId, dataFim);
+    public ResponseEntity<?> abrirPauta(@PathVariable @Valid Long pautaId, @RequestBody @Valid PautaDataFimDTO pautaDataFimDTO) {
+        return pautaService.abrirPauta(pautaId, pautaDataFimDTO);
     }
 
     @ApiResponse(responseCode = "202", description = "Realizar um voto via pautaID e CPF")
-    @PostMapping(value = "/votar/{pautaId}")
+    @PatchMapping(value = "/votar")
     @ResponseStatus(code = ACCEPTED)
-    public ResponseEntity<String> votar(@PathVariable @NotEmpty Long pautaId, @RequestBody @NotEmpty String cpf, @RequestBody @NotEmpty String voto) {
-        return votacaoService.votar(pautaId, cpf, voto);
+    public ResponseEntity<?> votar(@RequestBody @Valid VotoDTO voto) {
+        return votacaoService.votar(voto);
     }
 }
