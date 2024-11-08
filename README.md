@@ -8,6 +8,14 @@
 ### Precisa do comando "-parametro" adicional para executa-lá:
 ![image](https://github.com/user-attachments/assets/b193122b-54ae-4cac-8965-917ab0830ad9)
 
+# Características da API
+- DevTools Live reload
+- Persistencia mesmo após shutdown da api
+- MVC
+- Comunicação via JSON
+- Metodos documentados para usar com swagger futuramente
+- Tratamento de erros
+
 # Exemplo da API em funcionamento utilizando POSTMAN:
 base_url: http://localhost:8080/v1/votacao
 
